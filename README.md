@@ -1,2 +1,2 @@
 # workshops
-For sharing materials and resources from workshops I presented at or organized. 
+For sharing materials and resources from my workshops. 
