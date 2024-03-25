@@ -5,7 +5,9 @@ author:
  - "Instructor: William O. Agyapong^[woagyapong@miners.utep.edu, PhD Data Science, University of Texas at El Paso (UTEP).]"
  - ^[Sponsored by the Data Science PhD Program and the American Statistical Association (ASA) UTEP Chapter]
 date: "`r Sys.Date()`"
-output: pdf_document
+output: 
+    pdf_document:
+        number_section: yes
 header-includes: 
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
@@ -23,7 +25,7 @@ knitr::opts_chunk$set(echo = T,
 
 ```
 
-##  Project Instructions
+#  Project Instructions
 
 In this project, the goal is to develop an interactive dashboard for analyzing Twitter (now X) data. While the focus is on mastering Shiny application development, the project provides a glimpse into `Sentiment Analysis`. 
 
@@ -50,7 +52,7 @@ Codes for loading, preprocessing the data for analysis, and for generating graph
 
 \newpage
 
-```{r, out.width="100%", out.height="100%", eval=FALSE}
+```{r, out.width="100%", out.height="100%", echo=FALSE}
 # include image of application UI 
 knitr::include_graphics("base-app-ui.png")
 ```
@@ -60,7 +62,9 @@ knitr::include_graphics("base-app-ui.png")
 
 \newpage
 
-## Data analysis codes to get you started
+# Data analysis codes to get you started
+
+Download the source file containing the codes [here](https://github.com/williamagyapong/workshops/blob/main/UTEP-Spring24/project/final-project.Rmd). 
 
 Make sure you have the following packages installed:
 
@@ -92,7 +96,7 @@ library(kableExtra)
 ```
 
 
-### Data description and import
+## Data description and import
 
 
 Data for the project consist of former president of the US, Barack Obama’s 2014 - 2020 tweets downloaded directly from X (Twitter), and it is made available in excel (csv) format on [Github](https://github.com/williamagyapong/workshops/tree/main/UTEP-Spring24/project). View the data [here](https://github.com/williamagyapong/workshops/blob/main/UTEP-Spring24/project/Obama_tweets_2014-2020.csv), and use the *download raw file* button located in the upper right end of the page to download the data. 
@@ -123,7 +127,7 @@ head(obama_tweets) |>
 ```
 
 
-### Data Preprocessing 
+## Data Preprocessing 
 
 Some data preprocessing is necessary to clean up the tweet text such as the removal of links and quotation marks, and transformation of the text into a structured format for analysis. The cleansed and tokenized version of data is shown below.
 
