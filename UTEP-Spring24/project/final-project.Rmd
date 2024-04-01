@@ -34,7 +34,7 @@ As a participant of this workshop, your task involves:
 1. Building the application from scratch with inspiration from the base application provided. You can view the base application at [https://william-agyapong.shinyapps.io/tweet-insights/](https://william-agyapong.shinyapps.io/tweet-insights/). See a screenshot of the UI below. 
 
 2. Extend the features (capabilities) of the base application. Here are some suggestions for extension: 
-    - Personalize the app by using your preferred application layout (Checkout the [Iris dashboard codes](https://github.com/williamagyapong/workshops/blob/main/UTEP-Spring24/irisApp/demo_app.R) we went over, and [Application Layout Guide](https://shiny.posit.co/r/articles/build/layout-guide/))
+    - Personalize the app by using your preferred application layout (Checkout the [Iris dashboard codes](https://github.com/williamagyapong/workshops/blob/main/UTEP-Spring24/irisApp/app.R) we went over, and [Application Layout Guide](https://shiny.posit.co/r/articles/build/layout-guide/))
     - Tweeting Pattern: Provide options such as the ability for the user to change the unit or scale of the data plotted (percent, raw counts, log-scale, etc.), yearly comparisons such that the user is able to compare the trend across multiple years.
     
     - Most common words and sentiment dimensions plots can also benefit from multi-scale (raw count versus percent) data displays.
