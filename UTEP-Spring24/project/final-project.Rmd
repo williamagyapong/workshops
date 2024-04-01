@@ -41,26 +41,30 @@ As a participant of this workshop, your task involves:
     
     - Show/hide the corresponding bar graph data values on each bar.
     
-    - Switch between different plot themes (if you use `ggplot2` for plotting) or different color themes.
+    - Switch between different plot themes (if you use `ggplot2` for plotting) or different color themes. 
     
-    - Make the wordcloud and sentiment graph interactive. Think about providing some input controls to help tweak the behavior/look of the graphs.
+    - Make the wordcloud and sentiment graph interactive. Think about providing some input controls to help tweak the behavior/look of the graphs. 
 
 
 Codes for loading, preprocessing the data for analysis, and for generating graphs presented in the base application are provided towards the end of this document to give you a head start. Your ability to integrate these into the app would mean a great achievement towards our goal of equipping you with skills to be able to develop your own custom shiny applications. Note that, typically, you first run your analysis outside of shiny, making sure the basic functionalities work, and later translate that into a shiny application. It is our hope that this project gives you that feel and experience!
 
 > There will be a **code along session** during the final part of the workshop on **April 5**. Participants are however encouraged to start the application on their own to reinforce the concepts introduced and enhance better understanding of Shiny app development. For nothing at all, try creating the dashboard layout and insert some of the graphs with or without interactivity (Task #1). *Happy coding...*
 
-\newpage
+\newpage 
+
+
 
 ```{r, out.width="100%", out.height="100%", echo=FALSE}
 # include image of application UI 
 knitr::include_graphics("base-app-ui.png")
 ```
 
+
 [Click to view app](https://william-agyapong.shinyapps.io/tweet-insights/)
 
 
-\newpage
+\newpage 
+
 
 # Data analysis codes to get you started
 
