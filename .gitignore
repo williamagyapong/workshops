@@ -1,1 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.httr-oauth
 .DS_Store
+.log
+UTEP-Spring24/project/tweet-explorer
+UTEP-Spring24/project/app.R
