@@ -48,7 +48,7 @@ As a participant of this workshop, your task involves:
 
 Codes for loading, preprocessing the data for analysis, and for generating graphs presented in the base application are provided towards the end of this document to give you a head start. Your ability to integrate these into the app would mean a great achievement towards our goal of equipping you with skills to be able to develop your own custom shiny applications. Note that, typically, you first run your analysis outside of shiny, making sure the basic functionalities work, and later translate that into a shiny application. It is our hope that this project gives you that feel and experience!
 
-> There will be a **code along session** during the final part of the workshop on **April 5**. Participants are however encouraged to start the application on their own to reinforce the concepts introduced and enhance better understanding of Shiny app development. For nothing at all, try creating the dashboard layout and insert some of the graphs (Task #1). *Happy coding...*
+> There will be a **code along session** during the final part of the workshop on **April 5**. Participants are however encouraged to start the application on their own to reinforce the concepts introduced and enhance better understanding of Shiny app development. For nothing at all, try creating the dashboard layout and insert some of the graphs with or without interactivity (Task #1). *Happy coding...*
 
 \newpage
 
@@ -75,9 +75,9 @@ Make sure you have the following packages installed:
 - `scales`: formatting labels for axes and legends
 - `wordcloud`
 - `plotly` (optional): making interactive plots
-- `ggExtra` (optional): extends `ggplot2`
+<!-- - `ggExtra` (optional): extends `ggplot2` -->
 
-> You can simply install the `tidyverse` package to give you access to `dplyr`, `ggplot2`, `stringr`, and `lubridate`. 
+*You can simply install the `tidyverse` package to give you access to `dplyr`, `ggplot2`, `stringr`, and `lubridate`*. 
 
 
 ```{r}
@@ -87,7 +87,6 @@ library(tidytext)
 library(lubridate)
 library(scales)
 library(wordcloud)
-library(RColorBrewer)
 
 # for foramtting data frames into beautiful tables
 library(knitr)
@@ -148,7 +147,16 @@ obama_tweets_clean <- obama_tweets |>
   filter(!is_retweet) |> # sum(obama_tweets$is_retweet) == 0,
                          # indicating no retweets
   select(-is_retweet)
-    
+
+
+#--- create new columns
+# Eastern standard time was used to reflect the tweet location time zone, EST,
+# since we know that the user tweeted from Washington DC.
+obama_tweets_clean <- obama_tweets_clean |>
+  mutate(
+    hour = hour(with_tz(created_at, "EST")),
+    year = year(with_tz(created_at, "EST"))
+  )
 
 
 #--- some data cleansing is required to strip off unwanted characters and strings
@@ -174,9 +182,16 @@ tweet_words <- obama_tweets_clean |>
 head(tweet_words) |>
   kable(booktab=T, linsep="",
         caption = paste("Cleaned and tokenized version of the data, showing 6 observations out of", nrow(tweet_words))) |>
-   kable_styling(latex_options = c("HOLD_position")) |>
+   kable_styling(latex_options = c("HOLD_position", "scale_down")) |>
     kable_classic() 
 
+
+
+# save data in a compressed format for shiny application 
+if (FALSE) {
+    save(obama_tweets_clean, file = "obama_tweets_clean.RData")
+    save(tweet_words, file = "tweet_words.RData")
+}
 ```
 
 
@@ -186,16 +201,10 @@ head(tweet_words) |>
 
 ```{r}
 
-#----- Deriving hourly tweets in a day
-# Eastern standard time was used to reflect the tweet location time zone, EST,
-# since we know that the user tweeted from Washington DC.
-
+#----- Deriving hourly tweets in a day 
 hourly_tweet <- obama_tweets_clean |>
-  # extract the hour from each time tweet was posted
-  mutate(hour = hour(with_tz(created_at, tzone="EST"))) |> 
   # get the frequency of tweets for each hour of the day
-  count(name, hour) |> 
-  group_by(name) |>
+  count(hour) |> 
   # convert frequency (raw counts) to a percent
   mutate(percent = n / sum(n)) 
 
@@ -216,7 +225,34 @@ hourly_tweet <- obama_tweets_clean |>
   
 ```
 
+```{r compare-yearly-trend, eval=FALSE, echo=FALSE}
 
+#----- Deriving hourly tweets in a day by year
+hourly_tweet <- obama_tweets_clean |>
+  # get the frequency of tweets for each hour of the day
+  count(year, hour) |> 
+  # convert frequency (raw counts) to a percent
+  group_by(year) |>
+  mutate(percent = n / sum(n)) 
+
+# visualizing hour of day tweets were posted
+  ggplot(hourly_tweet, aes(hour, percent, color = factor(year))) + 
+      geom_line(show.legend = TRUE) +
+      geom_point(show.legend = FALSE) +
+      # facet_wrap(vars(year), scales = "free") + 
+      scale_y_continuous(labels = percent_format()) +
+      labs(x = "Hour of day (EST)", y = "% of tweets", color = "",
+       title = "Barack Obama's tweeting pattern per hour of day by year",
+       subtitle = paste("From ", format(obama_tweets_clean$date[length(obama_tweets_clean$date)],
+                                        "%b %d, %Y"), " to ",
+                        format(obama_tweets_clean$date[1],"%b %d, %Y"))) +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)
+        )
+  
+  
+```
  
 
 ## Commonly used words via bar chart
@@ -285,6 +321,7 @@ tweet_words %>%
 sentiments <- get_sentiments("nrc")
 # pos_neg_sentiments <- get_sentiments("bing") # classify words as either
                                                # positive/negative
+
 
 # count and compare the frequencies of each sentiment appearing in each device
   sentiment_summary <- tweet_words |>

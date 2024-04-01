@@ -333,7 +333,7 @@ backend <- function(input, output) {
   
   
   #------ downloading data
-  # Notice another custom make reactive context.
+  # Notice another custom made reactive context.
   dataset_input <- reactive({
     switch (input$dataset,
       "iris" = iris,
