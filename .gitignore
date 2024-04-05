@@ -5,9 +5,10 @@
 .DS_Store
 .log
 UTEP-Spring24/.DS_Store
-UTEP-Spring24/project/tweet-explorer
 UTEP-Spring24/project/app.R
 UTEP-Spring24/project/obama_tweets_clean.RData
 UTEP-Spring24/project/tweet_words.RData
 UTEP-Spring24/project/nrc_sentiments.RData
 UTEP-Spring24/project/.DS_Store
+UTEP-Spring24/irisApp2
+demo-app
