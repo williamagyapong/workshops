@@ -13,7 +13,7 @@ library(dplyr)
 library(tidytext)
 library(wordcloud)
 library(lubridate)
-# library(DT)
+
 
 
 #------ read-in the data
@@ -21,7 +21,9 @@ load("obama_tweets_clean.RData")
 load("tweet_words.RData")
 
 # for some reason this part doesnt work on the deployed 
-# app, so save the sentiments and load here
+# app, so save the sentiments and load here:
+# using the nrc lexicon to assign appropriate sentiment to words
+## sentiments <- get_sentiments("nrc")
 load("nrc_sentiments.RData") 
 
 #------ basic data preprocessing
@@ -61,6 +63,11 @@ frontend <- fluidPage(
             hr(),
             fluidRow(
                 column(6,
+                       
+                       # Effect from these two input controls are only
+                       # seen when the year is set to "All". 
+                       # It'll be useful to alert the user if they activate 
+                       # this option when the year is not "All".
                        checkboxInput("compare_yearly_trend", 
                                      "Compare yearly trend?"
                                      ),
@@ -107,25 +114,26 @@ frontend <- fluidPage(
             )
         ),
         
-        tabPanel("Sentiment Analysis",
-            
-        ),
-        
-        tabPanel("Work Anlytics",
-                 ),
         
         tabPanel("About the App",
-            HTML("
-            
+                 style = "background:grey; color:white; margin:10%; 
+                 padding:15px;",
+            h2("
+            The goal is to develop an interactive dashboard for 
+            analyzing Twitter (now X) data. 
+            While the focus is on mastering Shiny application development,
+            the project provides a glimpse into Sentiment Analysis.
                  ")
         )
     )
 )
 
+
 # Define the back end logic (server)
 backend <- function(input, output, session) {
     
-    # create custom reactive elements
+    # create custom reactive elements for use in different parts of the app.
+    
     selected_date <- reactive({
         if (input$tweet_year == "All" | input$compare_yearly_trend) {obama_tweets_clean$date}
         else {
@@ -158,7 +166,7 @@ backend <- function(input, output, session) {
         
         if (input$compare_yearly_trend & input$tweet_year =="All") {
             
-            
+            # prepare additional plot layers based on user selection
             gg_adds <- list(
                 if (input$facet_by_year) {
                     list(geom_line(show.legend = FALSE),
@@ -167,6 +175,7 @@ backend <- function(input, output, session) {
                     geom_line(show.legend = TRUE) 
                 }
             )
+            
             #----- Deriving hourly tweets in a day by year
             hourly_tweet <- selected_tweets() |>
                 # get the frequency of tweets for each hour of the day
@@ -273,7 +282,7 @@ backend <- function(input, output, session) {
     #------ render the sentiment dimensions
     output$sentiments <- renderPlot({
         # using the nrc lexicon to assign appropriate sentiment to words
-        # sentiments <- get_sentiments("nrc")
+        # sentiments <- get_sentiments("nrc") # dosn't work when app is hosted!
         # pos_neg_sentiments <- get_sentiments("bing") # classify words as either
         # positive/negative
         
@@ -312,7 +321,9 @@ backend <- function(input, output, session) {
     
     # displaying data
     output$data_head <- DT::renderDataTable({
-        # head(obama_tweets_clean)
+        # head(obama_tweets_clean) # No need for only head() when using the 
+                                   # data table DT package since it paginates 
+                                   # the data 
         obama_tweets_clean
     })
     
@@ -320,6 +331,8 @@ backend <- function(input, output, session) {
         # head(tweet_words)
         tweet_words
     })
+    
+    
 }
 
 # Run the application

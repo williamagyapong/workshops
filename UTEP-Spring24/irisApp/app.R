@@ -94,6 +94,7 @@ frontend <- fluidPage(
                ),
               
               mainPanel(
+                
                 plotOutput("scatter"),
                 
                 fluidRow( style="background-color:#f5f5f5; padding:19px;

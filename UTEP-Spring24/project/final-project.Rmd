@@ -116,6 +116,8 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 # read-in the data
 obama_tweets <- read.csv("obama_tweets_2014-2020.csv")
 
+
+
 # view first few rows of data
 head(obama_tweets) |>
   kable(booktab=T, 
@@ -192,7 +194,7 @@ head(tweet_words) |>
 
 
 # save data in a compressed format for shiny application 
-if (FALSE) {
+if (T) {
     save(obama_tweets_clean, file = "obama_tweets_clean.RData")
     save(tweet_words, file = "tweet_words.RData")
 }
@@ -229,7 +231,7 @@ hourly_tweet <- obama_tweets_clean |>
   
 ```
 
-```{r compare-yearly-trend, eval=FALSE, echo=FALSE}
+```{r compare-yearly-trend, eval=T, echo=T}
 
 #----- Deriving hourly tweets in a day by year
 hourly_tweet <- obama_tweets_clean |>
@@ -325,7 +327,21 @@ tweet_words %>%
 sentiments <- get_sentiments("nrc")
 # pos_neg_sentiments <- get_sentiments("bing") # classify words as either
                                                # positive/negative
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Displaying most commonly used words using wordcloud 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# setting seed for reproducibility of same results
+set.seed(22222)
+
+# most common words from Obama
+tweet_words %>%
+  anti_join(stop_words, by = "word") %>%
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100,
+                 random.order=FALSE,
+                 colors= brewer.pal(8,"Dark2"),
+                 scale = c(3,0.5)))
 
 # count and compare the frequencies of each sentiment appearing in each device
   sentiment_summary <- tweet_words |>
